@@ -1,0 +1,108 @@
+@import url(https://fonts.googleapis.com/css?family=Abel|Alfa+Slab+One);
+body {
+  padding: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: -webkit-linear-gradient(left, #d1d360 0%, #e5e696 50%, #d1d360 100%);
+  background: linear-gradient(to right, #d1d360 0%, #e5e696 50%, #d1d360 100%);
+}
+#piano {
+  border: 2px solid black;
+  width: 900px;
+  height: 400px;
+  padding: 1px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px;
+}
+#teclasBlancas {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+#teclasNegras {
+  height: 55%;
+  width: 74.5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  z-index: 5;
+  position: relative;
+  top: -400px;
+  left: 7%;
+  pointer-events: none;
+}
+.notes {
+  margin-bottom: 10px;
+  opacity: 0.5;
+  width: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+}
+.keyboardK {
+  font-family: 'Alfa Slab One', cursive;
+  width: 100%;
+  margin-top: 50%;
+  text-align: center;
+}
+.teclaBlanca {
+  width: 12.5%;
+  height: 99.5%;
+  border: 1px solid black;
+  border-radius: 3px;
+  box-shadow: 1px 1px 20px inset;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.teclaNegra {
+  width: 6%;
+  height: 100%;
+  background: black;
+  border-radius: 3px;
+  box-shadow: 2px 2px 30px;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  pointer-events: auto;
+}
+.teclaBlanca,
+.teclaNegra {
+  font-family: 'Abel', sans-serif;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+.teclaBlanca:active,
+.teclaBlancaKB {
+  box-shadow: 1px 1px 60px inset;
+}
+.teclaNegra:active,
+.teclaNegraKB {
+  box-shadow: 2px 2px 5px;
+}
+.dummy {
+  width: 6.5%;
+  height: 1%;
+}
