@@ -1,3 +1,5 @@
-A Pen created at CodePen.io. You can find this one at https://codepen.io/Faaa97/pen/BWaRLO.
+# JS-Piano
+A simple piano visualization using javascript.
 
+Liver demo: https://faaa97.github.io/JS-Piano/
  
