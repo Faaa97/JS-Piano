@@ -72,7 +72,7 @@ body {
   height: 100%;
   background: black;
   border-radius: 3px;
-  box-shadow: 2px 2px 30px;
+  box-shadow: 0px 1px 1px darkgrey;
   color: white;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -100,7 +100,7 @@ body {
 }
 .teclaNegra:active,
 .teclaNegraKB {
-  box-shadow: 2px 2px 5px;
+    box-shadow: 0px 1px 0px black;
 }
 .dummy {
   width: 6.5%;

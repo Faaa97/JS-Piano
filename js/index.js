@@ -6,11 +6,13 @@ var pianoN = document.getElementById('teclasNegras');
 var teclasBlancas = []; 
 var teclasNegras = [];
 
-var notes = ['c1','d1','e1','f1','g1','a1','b1','c2',
-             'c1s','d1s','f1s','g1s','a1s'];
+var notes = ['c4','d4','e4','f4','g4','a4','b4','c5',
+             'c4s','d4s','f4s','g4s','a4s'];
 var keys = [83,68,70,71,72,74,75,76,69,82,89,85,73];
 var keysK = ['S','D','F','G','H','J','K','L','E','R','Y','U','I'];
 var audio = [];
+
+let allowedKeys = {};
 
 /*******************FUNCIONES******************/
 
@@ -29,29 +31,39 @@ function makeDiv(text,item,clase) {
 /********************LISTENER TECLAS ******************/
 
 document.addEventListener('keydown', function(e) {
-  //console.log(keys.indexOf(e.keyCode))
+  if(allowedKeys[e.keyCode] === false) return;
+  allowedKeys[e.keyCode] = false;
+
   play(notes[keys.indexOf(e.keyCode)]); 
   if(keys.indexOf(e.keyCode)<8){
+    console.log(teclasBlancas);
     teclasBlancas[keys.indexOf(e.keyCode)].classList.add('teclaBlancaKB');
   }
   else{
-    //teclasNegras[keys.indexOf(e.keyCode)].classList.add('teclaNegraKB');
+      console.log(teclasNegras);
+    teclasNegras[keys.indexOf(e.keyCode) - 8].classList.add('teclaNegraKB');
   }
 });
 
 document.addEventListener('keyup', function(e) {
+    allowedKeys[e.keyCode] = true;
   //console.log(keys.indexOf(e.keyCode))
-  if(keys.indexOf(e.keyCode)<8)
+  if(keys.indexOf(e.keyCode)<8){
     teclasBlancas[keys.indexOf(e.keyCode)].classList.remove('teclaBlancaKB');
-  else
-    1
-    //teclasNegras[keys.indexOf(e.keyCode)].classList.remove('teclaNegraKB');
+  }
+  else {
+    teclasNegras[keys.indexOf(e.keyCode) - 8].classList.remove('teclaNegraKB');
+  }
 });
+
+document.addEventListener('focus' , function(e) {
+    allowedKeys = {};
+})
 
 
 /********************SONIDOS************************/
 for(i=0;i<notes.length;i++){
-  audio[i] = new Audio('https://rawcdn.githack.com/pffy/mp3-piano-sound/master/mp3/' + notes[i] + '.mp3');
+  audio[i] = new Audio('./mp3/' + notes[i] + '.mp3');
 }
 
 
@@ -93,6 +105,6 @@ for(i=0;i<5;i++){
   pianoN.appendChild(teclasNegras[i]);
 } 
 
-  teclasNegras.splice(2, 0, dummy);
+  //teclasNegras.splice(2, 0, dummy);
 
 /************************FORMATO NOTAS**********************/
