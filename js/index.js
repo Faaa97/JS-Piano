@@ -36,11 +36,9 @@ document.addEventListener('keydown', function(e) {
 
   play(notes[keys.indexOf(e.keyCode)]); 
   if(keys.indexOf(e.keyCode)<8){
-    console.log(teclasBlancas);
     teclasBlancas[keys.indexOf(e.keyCode)].classList.add('teclaBlancaKB');
   }
   else{
-      console.log(teclasNegras);
     teclasNegras[keys.indexOf(e.keyCode) - 8].classList.add('teclaNegraKB');
   }
 });
