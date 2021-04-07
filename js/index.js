@@ -1,108 +1,113 @@
 /******************VARIABLES***************/
 
-var pianoB = document.getElementById('teclasBlancas');
-var pianoN = document.getElementById('teclasNegras');
+let pianoB = document.getElementById('teclasBlancas');
+let pianoN = document.getElementById('teclasNegras');
 
-var teclasBlancas = []; 
-var teclasNegras = [];
-
-var notes = ['c4','d4','e4','f4','g4','a4','b4','c5',
-             'c4s','d4s','f4s','g4s','a4s'];
-var keys = [83,68,70,71,72,74,75,76,69,82,89,85,73];
-var keysK = ['S','D','F','G','H','J','K','L','E','R','Y','U','I'];
-var audio = [];
+let keys = [
+    {note: 'c4', white: undefined, label: 'S', keyboard: 83, dom: undefined, audio: undefined},
+    {note: 'd4', white: undefined, label: 'D', keyboard: 68, dom: undefined, audio: undefined},
+    {note: 'e4', white: undefined, label: 'F', keyboard: 70, dom: undefined, audio: undefined},
+    {note: 'f4', white: undefined, label: 'G', keyboard: 71, dom: undefined, audio: undefined},
+    {note: 'g4', white: undefined, label: 'H', keyboard: 72, dom: undefined, audio: undefined},
+    {note: 'a4', white: undefined, label: 'J', keyboard: 74, dom: undefined, audio: undefined},
+    {note: 'b4', white: undefined, label: 'K', keyboard: 75, dom: undefined, audio: undefined},
+    {note: 'c5', white: undefined, label: 'L', keyboard: 76, dom: undefined, audio: undefined},
+    {note: 'c4s', white: undefined, label: 'E', keyboard: 69, dom: undefined, audio: undefined},
+    {note: 'd4s', white: undefined, label: 'R', keyboard: 82, dom: undefined, audio: undefined},
+    {note: 'void'},
+    {note: 'f4s', white: undefined, label: 'Y', keyboard: 89, dom: undefined, audio: undefined},
+    {note: 'g4s', white: undefined, label: 'U', keyboard: 85, dom: undefined, audio: undefined},
+    {note: 'a4s', white: undefined, label: 'I', keyboard: 73, dom: undefined, audio: undefined},
+];
 
 let allowedKeys = {};
 
-/*******************FUNCIONES******************/
+/*******************FUNCTIONS******************/
 
-function play(o) {
-  audio[notes.indexOf(o)].currentTime = 0;  //Para que podamos darle varias veces aunque no haya acabado el mp3
-  audio[notes.indexOf(o)].play();
+function play(obj) {
+  obj.audio.currentTime = 0;
+  obj.audio.play();
 }
 
-function makeDiv(text,item,clase) {
-  var div = document.createElement('div');
+function makeDiv(text, item, clase) {
+  let div = document.createElement('div');
   div.innerHTML = text;
   div.classList.add(clase);
   item.appendChild(div);
 }
 
-/********************LISTENER TECLAS ******************/
+/********************LISTENERS******************/
 
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', (e) => {
+  e.preventDefault();
+
   if(allowedKeys[e.keyCode] === false) return;
   allowedKeys[e.keyCode] = false;
 
-  play(notes[keys.indexOf(e.keyCode)]); 
-  if(keys.indexOf(e.keyCode)<8){
-    teclasBlancas[keys.indexOf(e.keyCode)].classList.add('teclaBlancaKB');
-  }
-  else{
-    teclasNegras[keys.indexOf(e.keyCode) - 8].classList.add('teclaNegraKB');
-  }
+  const target = keys.find((key) => {
+    return key.keyboard === e.keyCode;
+  });
+
+  play(target);
+
+  const css = target.white ? 'teclaBlancaKB' : 'teclaNegraKB';
+  target.dom.classList.add(css);
 });
 
-document.addEventListener('keyup', function(e) {
-    allowedKeys[e.keyCode] = true;
-  //console.log(keys.indexOf(e.keyCode))
-  if(keys.indexOf(e.keyCode)<8){
-    teclasBlancas[keys.indexOf(e.keyCode)].classList.remove('teclaBlancaKB');
-  }
-  else {
-    teclasNegras[keys.indexOf(e.keyCode) - 8].classList.remove('teclaNegraKB');
-  }
+document.addEventListener('keyup', (e) => {
+  e.preventDefault();
+  allowedKeys[e.keyCode] = true;
+
+  const target = keys.find((key) => {
+    return key.keyboard === e.keyCode;
+  });
+
+  const css = target.white ? 'teclaBlancaKB' : 'teclaNegraKB';
+  target.dom.classList.remove(css);
 });
 
 document.addEventListener('focus' , function(e) {
-    allowedKeys = {};
+  allowedKeys = {};
 })
 
+/****************BUILDING THE PIANO*****************/
 
-/********************SONIDOS************************/
-for(i=0;i<notes.length;i++){
-  audio[i] = new Audio('./mp3/' + notes[i] + '.mp3');
-}
+keys.forEach( (key) => {
 
+  const match = key.note.match(/(\w\d[s])|(void)/);
 
-/********TECLAS BLANCAS ****************************/
+  // If it's dummy key, process and return
+  if(match && match[2]) {
+    let dummy = document.createElement('div');
+    dummy.classList.add('dummy');
+    pianoN.appendChild(dummy);
+    return;
+  }
 
-for(i=0;i<8;i++){
-  teclasBlancas[i] = document.createElement('div');
-  teclasBlancas[i].classList.add('teclaBlanca');
-  teclasBlancas[i].id = notes[i];
-  
-  
-  makeDiv(keysK[i],teclasBlancas[i],'keyboardK');
-  makeDiv(notes[i].toUpperCase().replace('S','#').replace(/[0-9]/g,''), teclasBlancas[i], 'notes');
-  
-  teclasBlancas[i].onmousedown = function() {play(this.id);}    //onclick -> onmousedown para que se ejecute el sonido al pulsar y no al dejar de pulsar
-  pianoB.appendChild(teclasBlancas[i]);
-  
-} 
+  // Load sound for this key
+  key.audio = new Audio('./mp3/' + key.note + '.mp3');
 
-/*****************TECLAS NEGRAS ***********************/
+  // Make HTML visualization
+  key.dom = document.createElement('div');
+  key.dom.id = key.note;
 
-  dummy =  document.createElement('div');
-  dummy.classList.add('dummy');
-  
+  // Make labels for key
+  makeDiv(key.label, key.dom, 'keyboardK');
+  makeDiv(key.note.toUpperCase().replace('S','#').replace(/[0-9]/g,''), key.dom, 'notes');
 
-for(i=0;i<5;i++){
-  teclasNegras[i] = document.createElement('div');
-  teclasNegras[i].classList.add('teclaNegra');
-  teclasNegras[i].id = notes[8+i];
-  
-  makeDiv(keysK[8+i],teclasNegras[i],'keyboardK');
-  makeDiv(notes[8+i].toUpperCase().replace('S','#').replace(/[0-9]/g,''),teclasNegras[i],'notes');
-  
-  teclasNegras[i].onmousedown = function() { play(this.id); }
-  
-  if(i==2)
-     pianoN.appendChild(dummy);
-     
-  pianoN.appendChild(teclasNegras[i]);
-} 
+  // Event listener
+  key.dom.onmousedown = () => {play(this.id)}
 
-  //teclasNegras.splice(2, 0, dummy);
+  // Append to correct HTML container
+  if(match){
+    key.white = false;
+    key.dom.classList.add('teclaNegra');
+    pianoN.appendChild(key.dom);
 
-/************************FORMATO NOTAS**********************/
+  } else { // White key
+    key.white = true;
+    key.dom.classList.add('teclaBlanca');
+    pianoB.appendChild(key.dom);
+  }
+
+});
