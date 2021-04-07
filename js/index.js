@@ -39,8 +39,6 @@ function makeDiv(text, item, clase) {
 /********************LISTENERS******************/
 
 document.addEventListener('keydown', (e) => {
-  e.preventDefault();
-
   if(allowedKeys[e.keyCode] === false) return;
   allowedKeys[e.keyCode] = false;
 
@@ -48,22 +46,27 @@ document.addEventListener('keydown', (e) => {
     return key.keyboard === e.keyCode;
   });
 
+  if(!target) return;
+
   play(target);
 
   const css = target.white ? 'teclaBlancaKB' : 'teclaNegraKB';
   target.dom.classList.add(css);
+  e.preventDefault();
 });
 
 document.addEventListener('keyup', (e) => {
-  e.preventDefault();
   allowedKeys[e.keyCode] = true;
 
   const target = keys.find((key) => {
     return key.keyboard === e.keyCode;
   });
 
+  if(!target) return;
+
   const css = target.white ? 'teclaBlancaKB' : 'teclaNegraKB';
   target.dom.classList.remove(css);
+  e.preventDefault();
 });
 
 document.addEventListener('focus' , function(e) {
